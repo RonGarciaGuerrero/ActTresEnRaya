@@ -1,0 +1,22 @@
+.tablero {
+    background: black;
+    display: inline-block;
+    border: 8px solid black;
+  }
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+    grid-gap: 8px;
+  }
+  .casilla {
+     /* centrando el contenido de la casilla */
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: Arial;
+    font-size: 3rem;
+    font-weight: bold;
+    /* background: white; */
+    background-image: url(../img/blanco.gif);
+  }
