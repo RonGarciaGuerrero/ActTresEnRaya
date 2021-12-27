@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tres en Raya</title>
     <link rel="stylesheet" href="./css/style.css">
+    <script type="text/javascript" src="./scripts/casilla.js"></script>
     <!-- Autor: Ronald Garcia Guerrero -->
 </head>
 <body>
@@ -13,10 +14,42 @@
 
     </header>
     <main>
-        <p>hola</p>
+        <p>Escoger avatar</p>
+        
+        <p>Selecciona un avatar para jugar</p>
+        
+        <div id="avatarSeleccionado"></div>
+
+        <!-- <div>
+            <div id="circulo" onclick="asignarAvatar();"> <img src="./img/circulo.gif" alt="circulo"> </div>
+            <div id="equis"> <img src="./img/equis.gif" alt="equis"> </div>
+        </div> -->
+        <div>   
+            <p>Jugador 1</p>
+            <select name="selecAvatar" id="selectAvatar1">
+                <option value="">Seleccione uno...</option>
+                <option value="./img/equis.gif">Equis</option>
+                <option value="./img/circulo.gif">Círculo</option>
+                
+            </select>
+            <div id="jugador1"></div>
+            
+
+
+            <p>Jugador 2</p>
+            <select name="selecAvatar" id="selectAvatar2">
+                <option value="">Seleccione uno...</option>
+                <option value="./img/equis.gif">Equis</option>
+                <option value="./img/circulo.gif">Círculo</option>
+            </select>
+            <div id="jugador2"></div>
+            <p></p>
+
+        </div>
+
         <div class="tablero">
             <div class="rejilla">
-                <div class="casilla" id="1">1</div>
+                <div class="casilla" id="1"></div>
                 <div class="casilla" id="2">2</div>
                 <div class="casilla" id="3">3</div>
                 <div class="casilla" id="4">4</div>
