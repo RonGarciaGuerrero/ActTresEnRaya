@@ -24,40 +24,38 @@
             <div id="circulo" onclick="asignarAvatar();"> <img src="./img/circulo.gif" alt="circulo"> </div>
             <div id="equis"> <img src="./img/equis.gif" alt="equis"> </div>
         </div> -->
-        <div>   
-            <p>Jugador 1</p>
+        <div id="seccionConfiguracion">   
             <select name="selecAvatar" id="selectAvatar1">
                 <option value="">Seleccione uno...</option>
-                <option value="./img/equis.gif">Equis</option>
-                <option value="./img/circulo.gif">Círculo</option>
+                <option value="clasico">Clásico</option>
+                <option value="matrix">Matrix</option>
                 
-            </select>
-            <div id="jugador1"></div>
-            
+            </select> <br>
 
-
-            <p>Jugador 2</p>
-            <select name="selecAvatar" id="selectAvatar2">
-                <option value="">Seleccione uno...</option>
-                <option value="./img/equis.gif">Equis</option>
-                <option value="./img/circulo.gif">Círculo</option>
-            </select>
-            <div id="jugador2"></div>
+            <label for="">Jugador 1</label>
+            <input type="text" id="j1" /><br>
+            <div id="j1Imagen"></div>
+            <label for="">Jugador 2</label>
+            <input type="text" id="j2" /><br>
+            <div id="j2Imagen"></div>
             <p></p>
+
+            <button id="iniciarPartido">Iniciar partida</button>
+            <p id="errores"></p>
 
         </div>
 
-        <div class="tablero">
+        <div class="tablero" style="display: none;">
             <div class="rejilla">
-                <div class="casilla" id="1"></div>
-                <div class="casilla" id="2">2</div>
-                <div class="casilla" id="3">3</div>
-                <div class="casilla" id="4">4</div>
-                <div class="casilla" id="5">5</div>
-                <div class="casilla" id="6">6</div>
-                <div class="casilla" id="7">7</div>
-                <div class="casilla" id="8">8</div>
-                <div class="casilla" id="9">9</div>
+                <div class="casilla" id="c1">1</div>
+                <div class="casilla" id="c2">2</div>
+                <div class="casilla" id="c3">3</div>
+                <div class="casilla" id="c4">4</div>
+                <div class="casilla" id="c5">5</div>
+                <div class="casilla" id="c6">6</div>
+                <div class="casilla" id="c7">7</div>
+                <div class="casilla" id="c8">8</div>
+                <div class="casilla" id="c9">9</div>
             </div>
         </div>
 
@@ -68,3 +66,7 @@
     
 </body>
 </html>
+
+<!-- /
+       
+    / -->
