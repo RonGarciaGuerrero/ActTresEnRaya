@@ -45,22 +45,13 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
 
     //Funcion comprobación
 
-    
-    
-    //esto no funciona
-    // function asignarAvatar(){
-    //     let avatar = document.getElementById("selectAvatar").value;
-        
-    //     document.getElementById("jugador1").innerHTML = "<img src='"+avatar+">";// le meto al div la imagen cogida en el select         
-    // }
-
     //con el evento change muestro el avatar cogido en el select
     const selectElement = document.querySelector('#selectAvatar1');
     selectElement.addEventListener('change', (event) => {
         //const jugador = document.querySelector('#jugador1');
         //jugador.innerHTML = '<img src="'+`${event.target.value}`+'" height="80">';//${} string template no se necesita usar el + para concatenar
 
-        const selectedTemplate = event.target.value; //valor (value) seleccionado por el usuario cuando cambia la opción del select, si el selectedTemplate es vacio da error
+        const selectedTemplate = event.target.value; //value seleccionado por el usuario cuando cambia la opción del select, si el selectedTemplate es vacio da error
         const jugadorDiv1 = document.querySelector('#j1Imagen');
         const jugadorDiv2 = document.querySelector('#j2Imagen');
         //si no se selecciona ningun template se deja todo sin imagenes y sin color de fondo
@@ -123,8 +114,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
         Cuando un jugador hace click en una casilla
         1) valido si no se ha jugado ya
         
-        2) Cambio el fondo de la casilla por el avatar de ese jugador
-
+        2) Cambio el fondo de la casilla por el avatar de ese jugador y cambio de turno
         */
         let arrayCasillas = document.querySelectorAll('.casilla'); 
         for(let i=0;i<arrayCasillas.length;i++){
@@ -141,21 +131,61 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
                     }
                     event.target.style.backgroundImage=rutaImagen;
                 }
+                //AQUI PROBABLEMENTE DEBA HACER UN TRY CATCH THROW
                 comprobacion();
             })
         }
+        
 
         //3) compruebo si ya se ha ganado o no, la funcion devuelve 1 si ha ganado el jug1, 2 si haganado el jg2, 0 si es un empate y null si se puede seguir jugando
         function comprobacion (){
             let ganador=null;
             let imagenGanadora=null;
             //aunque las no jugadas tienen una imagen blanca de fondo, esta imagen viene de una regla css por que no es accesible haciendo .style.backgroundImage. Las no jugadas devuelven vacio por no tener inline styles
+
+
+            //En este bloque de 8 if compruebo si las imagenes o el avatar de una serie de casillas son iguales, en caso que lo sean se identifica como la imagen ganadora y el jugador asociado a esa imagen es el ganador
             if(document.getElementById('c1').style.backgroundImage!=''&&document.getElementById('c1').style.backgroundImage==document.getElementById('c2').style.backgroundImage && document.getElementById('c2').style.backgroundImage==document.getElementById('c3').style.backgroundImage){
                 imagenGanadora=document.getElementById('c1').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
-
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
-            } 
+            }
+            if(document.getElementById('c4').style.backgroundImage!=''&&document.getElementById('c4').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c6').style.backgroundImage){
+                imagenGanadora=document.getElementById('c4').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+            if(document.getElementById('c7').style.backgroundImage!=''&&document.getElementById('c7').style.backgroundImage==document.getElementById('c8').style.backgroundImage && document.getElementById('c8').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
+                imagenGanadora=document.getElementById('c7').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+            if(document.getElementById('c1').style.backgroundImage!=''&&document.getElementById('c1').style.backgroundImage==document.getElementById('c4').style.backgroundImage && document.getElementById('c4').style.backgroundImage==document.getElementById('c7').style.backgroundImage){
+                imagenGanadora=document.getElementById('c1').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+            if(document.getElementById('c2').style.backgroundImage!=''&&document.getElementById('c2').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c8').style.backgroundImage){
+                imagenGanadora=document.getElementById('c2').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+            if(document.getElementById('c3').style.backgroundImage!=''&&document.getElementById('c3').style.backgroundImage==document.getElementById('c6').style.backgroundImage && document.getElementById('c6').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
+                imagenGanadora=document.getElementById('c3').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+            if(document.getElementById('c1').style.backgroundImage!=''&&document.getElementById('c1').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
+                imagenGanadora=document.getElementById('c1').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+            if(document.getElementById('c3').style.backgroundImage!=''&&document.getElementById('c3').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c7').style.backgroundImage){
+                imagenGanadora=document.getElementById('c3').style.backgroundImage;
+                //se elimina el url que rodea a la imagen de fondo ganadora
+                imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
+            }
+
             //basado en la imagen ganadora, se determina quien ha ganado
             if(imagenGanadora!=null){//SI NO HAY IMAGEN GANADORA, NO HA GANADO NADIE
                 console.log('ig='+imagenGanadora);
@@ -175,6 +205,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
                     break;//paro cuando hay una blanca y salgo
                 }  
             }
+            
             //un empate es cuando estan todas las casillas llenas y no hay ganador 
             if (imagenGanadora==null && !hayBlancas){
                 ganador=0;
@@ -182,6 +213,21 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             console.log('ganador= '+ganador);
             return ganador;
         }
+        
+        //TERMINAR EL JUEGO
+        let ganador = comprobacion();
+        //5) Si ha ganado o empatado, finalizo juego
+        if(ganador==1||ganador==2||ganador==0){
+            //¿como finalizo el juego?
+            if(ganador==0){
+                document.getElementById('aviso').innerHTML='Es un empate';    
+            }else{
+                document.getElementById('aviso').innerHTML='El ganador es el jugador '+ganador;
+            return;//para salir de la funcion
+            }
+            
+        }
+
 
     });
 
@@ -191,8 +237,8 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
 
 
     /*
-    4) Si ha ganado o empatado, finalizo juego
-    5) Si no ha ganado o empatado, cambio de turno
+    
+    
     */
 
     /**
@@ -215,18 +261,18 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
 
 
     
-    var casilla = document.querySelector('#c1');
-    casilla.onclick = asignarAvatar;
+    // var casilla = document.querySelector('#c1');
+    // casilla.onclick = asignarAvatar;
 
 
-    function asignarAvatar(){
-        const selectCasilla = document.querySelector('#c1');
-        selectCasilla.addEventListener('click', function(){
-            var imagen = document.getElementById('#j1Imagen')
-            selectCasilla.style.backgroundImage = turno.avatar;
-        });
-        //falta poenr el tamaño y asociar a que sea la seleccionada
-    }
+    // function asignarAvatar(){
+    //     const selectCasilla = document.querySelector('#c1');
+    //     selectCasilla.addEventListener('click', function(){
+    //         var imagen = document.getElementById('#j1Imagen')
+    //         selectCasilla.style.backgroundImage = turno.avatar;
+    //     });
+    //     //falta poenr el tamaño y asociar a que sea la seleccionada
+    // }
 
 
 });
