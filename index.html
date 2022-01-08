@@ -11,9 +11,10 @@
 </head>
 <body>
     <header>
-
+        <h1>Tres en raya</h1>
     </header>
     <main>
+        
         <p>Escoger avatar</p>
         
         <p>Selecciona un avatar para jugar</p>
@@ -29,6 +30,7 @@
                 <option value="">Seleccione uno...</option>
                 <option value="clasico">Clásico</option>
                 <option value="matrix">Matrix</option>
+                <option value="derbi">Derbi</option>
                 
             </select> <br>
 
@@ -47,24 +49,32 @@
 
         <div class="tablero" style="display: none;">
             <div class="rejilla">
-                <div class="casilla" id="c1">1</div>
-                <div class="casilla" id="c2">2</div>
-                <div class="casilla" id="c3">3</div>
-                <div class="casilla" id="c4">4</div>
-                <div class="casilla" id="c5">5</div>
-                <div class="casilla" id="c6">6</div>
-                <div class="casilla" id="c7">7</div>
-                <div class="casilla" id="c8">8</div>
-                <div class="casilla" id="c9">9</div>
+                <div class="casilla" id="c1"></div>
+                <div class="casilla" id="c2"></div>
+                <div class="casilla" id="c3"></div>
+                <div class="casilla" id="c4"></div>
+                <div class="casilla" id="c5"></div>
+                <div class="casilla" id="c6"></div>
+                <div class="casilla" id="c7"></div>
+                <div class="casilla" id="c8"></div>
+                <div class="casilla" id="c9"></div>
             </div>
         </div>
         <div>
             <p id="aviso"></p>
         </div>
-
+        <div>
+            <p id="marcador"></p>
+        </div>
+        <div class="finalizar" style="display: none;">
+            <button id="reiniciar">Revancha</button>&nbsp;&nbsp;&nbsp;
+            <button id="volver">Volver al Incio</button>
+        </div>
+        <button id="verRanking">Ver ranking</button>
+        <div id="ranking"></div>
     </main>
     <footer>
-
+        <h3>Autor: Ronald Garcia Guerrero</h3>
     </footer>
     
 </body>

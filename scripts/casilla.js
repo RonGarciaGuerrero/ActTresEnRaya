@@ -1,9 +1,3 @@
-// let objCasillas =[
-//     {
-//         id : 1,
-//         avatar : "https://ibb.co/nnLrvCJ"
-//     }
-// ]
 
 window.addEventListener("DOMContentLoaded", function () {//todo lo que debe esperar a que se cargue la pagina se mete en esta función
     //Entorno:
@@ -14,17 +8,18 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
     const marcador = {//se llamaba ranking pero le he cambiado el nombre a marcador porque el ranking es el numero de partidas ganadas por un jugador, marcador es de la serie de partidas actual
         partidasJ1: 0,
         partidasJ2: 0,
-        partidasEmpate:0,
-        totalPartidas: 0    
+        partidasEmpate:0    
     }
 
     const jugador1 = {
         nombre: '',
+        marcador:0
         //avatar: '' el avatar se coge del template, 
     }
 
     const jugador2 = {
         nombre: '',
+        marcador:0
         //avatar: ''
     }
 
@@ -33,15 +28,30 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
         clasico: {
             avatar1: './img/circulo.gif',
             avatar2: './img/equis.gif',
-            background: 'gray'
+            //background: 'clasico'
+            class: 'clasico'
         },
         matrix: {
             avatar1: './img/neo.png',
             avatar2: './img/trinity.png',
-            background: 'red'
+            //background: 'red'
+            class: 'matrix'
+        },
+        derbi:{
+            avatar1: './img/sevilla.png',
+            avatar2: './img/betis.png',
+            class: 'derbi'
         }
     }
 
+    //Ranking
+    //set key localstorage
+    //se pregunta si existe de antes el objeto ranking y si no existe se crea vacio
+    const ranking = localStorage.getItem('ranking');
+    
+    if (!ranking){
+        localStorage.setItem('ranking', '{}');
+    }
 
     //Funcion comprobación
 
@@ -58,7 +68,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
         if(selectedTemplate==''){
             jugadorDiv1.innerHTML='';
             jugadorDiv2.innerHTML='';
-            document.querySelector('body').style.backgroundColor = 'white';
+            document.querySelector('body').className = '';
             template=null;
         }else{
             const templateInfo = templates[selectedTemplate];//no se usa la notación del punto porque es dinámico y no se sabe cual es la temática que se va a escoger
@@ -73,7 +83,8 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             jugadorDiv2.innerHTML = `<img src="${template.avatar2}" height="80">`;
 
             //actualizar el background
-            document.querySelector('body').style.backgroundColor = templateInfo.background;
+            //document.querySelector('body').style.backgroundColor = templateInfo.background;
+            document.querySelector('body').className = templateInfo.class;
         }
     });
     
@@ -107,7 +118,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             //desaparecer la seccion de configuracion
                 document.querySelector('#seccionConfiguracion').style.display='none';
             // aparecer el tablero y asignar el turno inicial
-            document.querySelector('.tablero').style.display='block';
+            document.querySelector('.tablero').style.display='inline-block';
         } 
         
         /*
@@ -119,8 +130,15 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
         let arrayCasillas = document.querySelectorAll('.casilla'); 
         for(let i=0;i<arrayCasillas.length;i++){
             arrayCasillas[i].addEventListener('click',function(event){
+
+                let ganador = comprobacion();
+                if (ganador!=null){
+                    return;//con este return ya no se ejecuta lo que esta debajo, el juego se ha terminado
+                }
+                
+
                 //miro si la casilla esta blanca, es decir si no se ha jugado
-                if(event.target.style.backgroundImage==''){
+                if(esCasillaVacia(event.target.id)){
                     let rutaImagen=null;
                     if(turno==1){
                         rutaImagen="url("+template.avatar1+")";
@@ -131,11 +149,50 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
                     }
                     event.target.style.backgroundImage=rutaImagen;
                 }
-                //AQUI PROBABLEMENTE DEBA HACER UN TRY CATCH THROW
-                comprobacion();
+                
+                //comprobacion();
+
+                //TERMINAR EL JUEGO
+                ganador = comprobacion();
+                //5) Si ha ganado o empatado, finalizo juego
+                if(ganador==1||ganador==2||ganador==0){
+                //¿como finalizo el juego?
+                    if(ganador==0){
+                        document.getElementById('aviso').innerHTML='Es un empate';
+                        marcador.partidasJ1=marcador.partidasJ1+1;
+                        marcador.partidasJ2=marcador.partidasJ2+1;
+                    }else{
+                        let nombreGanador, nombrePerdedor;
+                        if(ganador==1){
+                            nombreGanador=jugador1.nombre;
+                            nombrePerdedor=jugador2.nombre;
+                        }else{
+                            nombreGanador=jugador2.nombre;
+                            nombrePerdedor=jugador1.nombre;
+                        }
+                        rankingInfo = JSON.parse(localStorage.getItem('ranking'));//se obtiene del localstorage la cadena guardada como ranking y se convierte como objeto JavaScript
+                        if(!(nombreGanador  in rankingInfo)){
+                            rankingInfo[nombreGanador]={ganadas:1,perdidas:0}
+                        }else{//si existe
+                            rankingInfo[nombreGanador].ganadas=rankingInfo[nombreGanador].ganadas+1;
+                        }
+                        if(!(nombrePerdedor in rankingInfo)){
+                            rankingInfo[nombrePerdedor]={ganadas:0,perdidas:1}
+                        }else{//si existe
+                            rankingInfo[nombrePerdedor].ganadas=rankingInfo[nombrePerdedor].perdidas+1;
+                        }
+                        //ahora se modifica el ranking existente con la informacion nueva
+                        localStorage.setItem('ranking',JSON.stringify(rankingInfo));
+
+                        document.getElementById('aviso').innerHTML='El ganador es el jugador '+ganador;
+                    }
+                }
             })
         }
         
+        function esCasillaVacia(idCasilla){
+            return document.getElementById(idCasilla).style.backgroundImage=='url("./img/blanco.gif")'|| document.getElementById(idCasilla).style.backgroundImage=='';
+        }
 
         //3) compruebo si ya se ha ganado o no, la funcion devuelve 1 si ha ganado el jug1, 2 si haganado el jg2, 0 si es un empate y null si se puede seguir jugando
         function comprobacion (){
@@ -143,44 +200,45 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             let imagenGanadora=null;
             //aunque las no jugadas tienen una imagen blanca de fondo, esta imagen viene de una regla css por que no es accesible haciendo .style.backgroundImage. Las no jugadas devuelven vacio por no tener inline styles
 
+            
 
             //En este bloque de 8 if compruebo si las imagenes o el avatar de una serie de casillas son iguales, en caso que lo sean se identifica como la imagen ganadora y el jugador asociado a esa imagen es el ganador
-            if(document.getElementById('c1').style.backgroundImage!=''&&document.getElementById('c1').style.backgroundImage==document.getElementById('c2').style.backgroundImage && document.getElementById('c2').style.backgroundImage==document.getElementById('c3').style.backgroundImage){
+            if(!esCasillaVacia('c1')&&document.getElementById('c1').style.backgroundImage==document.getElementById('c2').style.backgroundImage && document.getElementById('c2').style.backgroundImage==document.getElementById('c3').style.backgroundImage){
                 imagenGanadora=document.getElementById('c1').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c4').style.backgroundImage!=''&&document.getElementById('c4').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c6').style.backgroundImage){
+            if(!esCasillaVacia('c4')&&document.getElementById('c4').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c6').style.backgroundImage){
                 imagenGanadora=document.getElementById('c4').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c7').style.backgroundImage!=''&&document.getElementById('c7').style.backgroundImage==document.getElementById('c8').style.backgroundImage && document.getElementById('c8').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
+            if(!esCasillaVacia('c7')&&document.getElementById('c7').style.backgroundImage==document.getElementById('c8').style.backgroundImage && document.getElementById('c8').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
                 imagenGanadora=document.getElementById('c7').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c1').style.backgroundImage!=''&&document.getElementById('c1').style.backgroundImage==document.getElementById('c4').style.backgroundImage && document.getElementById('c4').style.backgroundImage==document.getElementById('c7').style.backgroundImage){
+            if(!esCasillaVacia('c1')&&document.getElementById('c1').style.backgroundImage==document.getElementById('c4').style.backgroundImage && document.getElementById('c4').style.backgroundImage==document.getElementById('c7').style.backgroundImage){
                 imagenGanadora=document.getElementById('c1').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c2').style.backgroundImage!=''&&document.getElementById('c2').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c8').style.backgroundImage){
+            if(!esCasillaVacia('c2')&&document.getElementById('c2').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c8').style.backgroundImage){
                 imagenGanadora=document.getElementById('c2').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c3').style.backgroundImage!=''&&document.getElementById('c3').style.backgroundImage==document.getElementById('c6').style.backgroundImage && document.getElementById('c6').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
+            if(!esCasillaVacia('c3')&&document.getElementById('c3').style.backgroundImage==document.getElementById('c6').style.backgroundImage && document.getElementById('c6').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
                 imagenGanadora=document.getElementById('c3').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c1').style.backgroundImage!=''&&document.getElementById('c1').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
+            if(!esCasillaVacia('c1')&&document.getElementById('c1').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c9').style.backgroundImage){
                 imagenGanadora=document.getElementById('c1').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
             }
-            if(document.getElementById('c3').style.backgroundImage!=''&&document.getElementById('c3').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c7').style.backgroundImage){
+            if(!esCasillaVacia('c3')&&document.getElementById('c3').style.backgroundImage==document.getElementById('c5').style.backgroundImage && document.getElementById('c5').style.backgroundImage==document.getElementById('c7').style.backgroundImage){
                 imagenGanadora=document.getElementById('c3').style.backgroundImage;
                 //se elimina el url que rodea a la imagen de fondo ganadora
                 imagenGanadora=imagenGanadora.substring(5,imagenGanadora.length-2);
@@ -192,15 +250,28 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
                 console.log('av1='+template.avatar1);
                 if(template.avatar1==imagenGanadora){
                     ganador=1;
+                    jugador1.marcador=jugador1.marcador+1;
+                    marcador.partidasJ1=marcador.partidasJ1+1;
+                    //Mostrar opcion de revancha o inicio 
+                    document.querySelector('.finalizar').style.display='block';
+                    //actualizar marcador
+                    document.getElementById('marcador').innerHTML='Marcador:<br/>'+jugador1.nombre+"="+jugador1.marcador+'  |  '+jugador2.nombre+"="+jugador2.marcador;
                 }else{
                     ganador=2;
+                    jugador2.marcador=jugador2.marcador+1;
+                    marcador.partidasJ2=marcador.partidasJ2+1;
+                    //Mostrar opcion de revancha o inicio
+                    document.querySelector('.finalizar').style.display='block';
+                    //actualizar marcador
+                    document.getElementById('marcador').innerHTML='Marcador:<br/>'+jugador1.nombre+"="+jugador1.marcador+'  |  '+jugador2.nombre+"="+jugador2.marcador;
+                
                 }
             }
             
             let todasLasCasillas=document.querySelectorAll('.casilla');
             let hayBlancas=false;
             for(let i=0;i<todasLasCasillas.length;i++){
-                if(todasLasCasillas[i].style.backgroundImage==''){
+                if(esCasillaVacia(todasLasCasillas[i].id)){//se cambia la condicion por la funcion 
                     hayBlancas=true;
                     break;//paro cuando hay una blanca y salgo
                 }  
@@ -209,72 +280,45 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             //un empate es cuando estan todas las casillas llenas y no hay ganador 
             if (imagenGanadora==null && !hayBlancas){
                 ganador=0;
+                //Mostrar opcion de revancha o inicio 
+                document.querySelector('.finalizar').style.display='block';
             }
             console.log('ganador= '+ganador);
             return ganador;
         }
         
-        //TERMINAR EL JUEGO
-        let ganador = comprobacion();
-        //5) Si ha ganado o empatado, finalizo juego
-        if(ganador==1||ganador==2||ganador==0){
-            //¿como finalizo el juego?
-            if(ganador==0){
-                document.getElementById('aviso').innerHTML='Es un empate';    
-            }else{
-                document.getElementById('aviso').innerHTML='El ganador es el jugador '+ganador;
-            return;//para salir de la funcion
+        function reiniciarPartida (){
+            //1) limpiar casillas
+            //document.querySelectorAll('.casilla').style.backgroundImage='';
+            let todasLasCasillas = document.querySelectorAll('.casilla');
+            for(let i=0;i<todasLasCasillas.length;i++){
+                todasLasCasillas[i].style.backgroundImage='url("./img/blanco.gif")';
             }
-            
+            // 2) reiniciar turno
+            turno=1;
+            document.getElementById('aviso').innerHTML='';
         }
-
-
+        function volver (){
+            location.reload();
+        }
+        document.getElementById('reiniciar').addEventListener('click',function(event){
+            reiniciarPartida();
+            document.querySelector('.finalizar').style.display='none';
+            ganador=null;
+        })
     });
-
-
-
     
-
-
-    /*
+    //MOSTRAR RANKING falta ordenar
+    document.getElementById('verRanking').addEventListener('click',function(){
+        let cadena='<ol>';
+        rankingInfo = JSON.parse(localStorage.getItem('ranking'));
+            for(let nombreJugador in rankingInfo){//para iterar en el objeto
+                cadena+='<li>'+nombreJugador+': '+rankingInfo[nombreJugador].ganadas+' ganadas, '+rankingInfo[nombreJugador].perdidas+' perdidas</li>';
+            }
+            cadena+='</ol>'
+        document.getElementById('ranking').innerHTML= cadena;
+    });
     
-    
-    */
-
-    /**
-     * Finalizar juego
-     * 1) actualizar ranking
-     * 2) Mostrar opcion de revancha o inicio
-     * 3) si el usuario hace click en revancha --> Reinicar partida
-     * 4) si no, volvemos a la pagina inicial de configuracion de usuarios y tablero oculto
-     */
-
-    /**
-     * Reiniciar partida
-     * 1) limpiar casillas
-     * 2) reiniciar turno
-     */
-
-
-
-
-
-
-    
-    // var casilla = document.querySelector('#c1');
-    // casilla.onclick = asignarAvatar;
-
-
-    // function asignarAvatar(){
-    //     const selectCasilla = document.querySelector('#c1');
-    //     selectCasilla.addEventListener('click', function(){
-    //         var imagen = document.getElementById('#j1Imagen')
-    //         selectCasilla.style.backgroundImage = turno.avatar;
-    //     });
-    //     //falta poenr el tamaño y asociar a que sea la seleccionada
-    // }
-
-
 });
 
 // https://ibb.co/QvP3k9c
