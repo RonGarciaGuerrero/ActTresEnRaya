@@ -68,7 +68,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
         if(selectedTemplate==''){
             jugadorDiv1.innerHTML='';
             jugadorDiv2.innerHTML='';
-            document.querySelector('body').className = '';
+            document.querySelector('#contenedor').className = '';
             template=null;
         }else{
             const templateInfo = templates[selectedTemplate];//no se usa la notación del punto porque es dinámico y no se sabe cual es la temática que se va a escoger
@@ -84,7 +84,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
 
             //actualizar el background
             //document.querySelector('body').style.backgroundColor = templateInfo.background;
-            document.querySelector('body').className = templateInfo.class;
+            document.querySelector('#contenedor').className = templateInfo.class;
         }
     });
     
