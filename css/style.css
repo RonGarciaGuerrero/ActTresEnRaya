@@ -40,3 +40,12 @@
     background-size: 100px 100px;
     background-position: 0 0, 50px 50px;
   }
+  body {
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  #ranking{
+    width: fit-content;
+    margin-right: auto;
+    margin-left: auto;
+  }

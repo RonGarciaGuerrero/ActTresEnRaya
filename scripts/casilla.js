@@ -97,7 +97,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             document.getElementById('errores').innerHTML+='No se puede iniciar la partida si no se ha seleccionado una temática<br/>';
         }
         //validar que los nombres se hayan colocado
-        let regex = /(^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{3,16})+$/;
+        let regex = /^[\da-zA-Z]+$/;//alfanumérico
         let nomJ1 = document.querySelector('#j1').value;
         let nomJ2 = document.querySelector('#j2').value;
         if(!regex.test(nomJ1)){
@@ -298,20 +298,26 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             turno=1;
             document.getElementById('aviso').innerHTML='';
         }
-        function volver (){
-            location.reload();
-        }
+
         document.getElementById('reiniciar').addEventListener('click',function(event){
             reiniciarPartida();
             document.querySelector('.finalizar').style.display='none';
             ganador=null;
         })
     });
+
+    function volver (){
+        location.reload();
+    }
+    document.getElementById('volver').addEventListener('click',function(){
+        volver();
+    })
     
-    //MOSTRAR RANKING falta ordenar
+    //MOSTRAR RANKING falta ordenar, muestra una lista pero
     document.getElementById('verRanking').addEventListener('click',function(){
         let cadena='<ol>';
         rankingInfo = JSON.parse(localStorage.getItem('ranking'));
+        
             for(let nombreJugador in rankingInfo){//para iterar en el objeto
                 cadena+='<li>'+nombreJugador+': '+rankingInfo[nombreJugador].ganadas+' ganadas, '+rankingInfo[nombreJugador].perdidas+' perdidas</li>';
             }
@@ -320,6 +326,7 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
     });
     
 });
+
 
 // https://ibb.co/QvP3k9c
 //https://ibb.co/nnLrvCJ
