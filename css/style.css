@@ -50,12 +50,12 @@
     background-image: radial-gradient(circle, gray 20%, transparent 10%), radial-gradient(circle, gray 20%, transparent 10%);
     background-size: 100px 100px;
     background-position: 0 0, 50px 50px; */
-    background-image: url(../img/pexels-amy-burry-3354774.jpg);
+    background-image: url(../img/escudo_villanueva_opt.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  
   }
   
   body {
@@ -75,5 +75,5 @@
     
   }
   #contenedor{
-    background-color: gray;
+    background-color: rgb(190, 190, 190);
   }

@@ -73,8 +73,6 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
         }else{
             const templateInfo = templates[selectedTemplate];//no se usa la notación del punto porque es dinámico y no se sabe cual es la temática que se va a escoger
             //actualiza info de jugadores
-            //jugador1.avatar = templateInfo.avatar1;
-            //jugador2.avatar = templateInfo.avatar2;
             template=templateInfo;
             //Actualizar imagen que se muestra en la configuracion
         
@@ -83,7 +81,6 @@ window.addEventListener("DOMContentLoaded", function () {//todo lo que debe espe
             jugadorDiv2.innerHTML = `<img src="${template.avatar2}" height="80">`;
 
             //actualizar el background
-            //document.querySelector('body').style.backgroundColor = templateInfo.background;
             document.querySelector('#contenedor').className = templateInfo.class;
         }
     });
